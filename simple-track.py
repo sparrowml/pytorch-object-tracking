@@ -25,6 +25,7 @@ def track(
     active_tracklets = []
     finished_tracklets = []
     for i, frame in enumerate(reader):
+        height, width = frame.shape[:2]
         # Detection
         x = to_tensor(frame).to(device)
         result = model(x[None])[0]
@@ -33,7 +34,9 @@ def track(
         mask = torch.logical_and(
             result["labels"] == class_index, result["scores"] > score_threshold
         )
-        boxes = result["boxes"][mask].data.cpu().numpy()
+        boxes = result["boxes"][mask].data.cpu().numpy() / np.array(
+            [width, height, width, height]
+        )
         prev_indices = boxes_indices = []
         if i > 0:
             # Pairwise cost: euclidean distance between boxes
@@ -43,7 +46,7 @@ def track(
         # Add matches to active tracklets
         for prev_idx, box_idx in zip(prev_indices, boxes_indices):
             active_tracklets[prev_idx]["boxes"].append(
-                np.round(boxes[box_idx]).astype("int").tolist()
+                np.round(boxes[box_idx], 3).tolist()
             )
         # Finalize lost tracklets
         lost_indices = set(range(len(active_tracklets))) - set(prev_indices)
@@ -53,7 +56,7 @@ def track(
         new_indices = set(range(len(boxes))) - set(boxes_indices)
         for new_idx in new_indices:
             active_tracklets.append(
-                {"start": i, "boxes": [np.round(boxes[new_idx]).astype(int).tolist()]}
+                {"start": i, "boxes": [np.round(boxes[new_idx], 3).tolist()]}
             )
         # "Predict" next frame for comparison
         prev_boxes = np.array([tracklet["boxes"][-1] for tracklet in active_tracklets])
