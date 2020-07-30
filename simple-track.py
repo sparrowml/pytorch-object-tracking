@@ -38,8 +38,6 @@ def track(
             cost = np.linalg.norm(prev_boxes[:, None] - boxes[None], axis=-1)
             # Bipartite matching
             prev_indices, boxes_indices = linear_sum_assignment(cost)
-        # Predict next
-        prev_boxes = boxes
 
         # Add matches to active tracklets
         for prev_idx, box_idx in zip(prev_indices, boxes_indices):
@@ -52,6 +50,9 @@ def track(
         new_indices = set(range(len(boxes))) - set(boxes_indices)
         for new_idx in new_indices:
             active_tracklets.append({"start": i, "boxes": [boxes[new_idx].tolist()]})
+
+        # Predict next
+        prev_boxes = np.array([tracklet["boxes"][-1] for tracklet in active_tracklets])
     with open(output_path, "w") as f:
         f.write(json.dumps(finished_tracklets + active_tracklets))
 
