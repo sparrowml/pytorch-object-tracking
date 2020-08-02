@@ -41,7 +41,7 @@ def track(
         if i > 0:
             # Pairwise cost: euclidean distance between boxes
             cost = np.linalg.norm(prev_boxes[:, None] - boxes[None], axis=-1)
-            # Bipartite matching
+            # Object matching
             prev_indices, boxes_indices = linear_sum_assignment(cost)
         # Add matches to active tracklets
         for prev_idx, box_idx in zip(prev_indices, boxes_indices):
