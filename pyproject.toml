@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "pytorch-object-tracking"
+version = "0.1.0"
+description = "Track objects in a video in 75 lines of code."
+authors = ["jbencook <ben@sparrow.dev>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.11"
+imageio = "^2.13.5"
+imageio-ffmpeg = "^0.4.5"
+torch = "^1.10.1"
+torchvision = "^0.11.2"
+scipy = "^1.7.3"
+fire = "^0.4.0"
+
+[tool.poetry.dev-dependencies]
+black = "^21.12b0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
