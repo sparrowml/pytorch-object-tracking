@@ -24,6 +24,7 @@ def track(
     # Tracking loop
     active_tracklets = []
     finished_tracklets = []
+    prev_boxes = []
     for i, frame in enumerate(reader):
         height, width = frame.shape[:2]
         # Detection
@@ -37,8 +38,9 @@ def track(
         boxes = result["boxes"][mask].data.cpu().numpy() / np.array(
             [width, height, width, height]
         )
-        prev_indices = boxes_indices = []
-        if i > 0:
+        prev_indices = []
+        boxes_indices = []
+        if len(boxes) > 0 and len(prev_boxes) > 0:
             # Pairwise cost: euclidean distance between boxes
             cost = np.linalg.norm(prev_boxes[:, None] - boxes[None], axis=-1)
             # Object matching
