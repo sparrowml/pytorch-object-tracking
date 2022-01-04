@@ -4,8 +4,8 @@ Track objects in a video in 75 lines of code. Here are commands to track cars in
 
 ```
 wget https://silly-noyce-82730b.netlify.app/traffic.mp4
-pipenv install
-pipenv run python simple-track.py traffic.mp4 --class-index 3
+poetry install
+python simple-track.py traffic.mp4 --class-index 3
 ```
 
 You can see a visualization of this algorithm in action [here](https://silly-noyce-82730b.netlify.app/).
