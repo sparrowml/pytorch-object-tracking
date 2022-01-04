@@ -1,0 +1,25 @@
+{
+	"name": "pytorch-object-tracking",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": ".."
+	},
+	"settings": {
+		"python.pythonPath": "/usr/local/bin/python",
+		"python.languageServer": "Pylance",
+		"python.linting.enabled": true,
+		"python.formatting.blackPath": "/usr/local/bin/black",
+		"python.formatting.provider": "black",
+		"editor.formatOnSave": true
+	},
+	"extensions": [
+		"ms-python.python",
+		"ms-python.vscode-pylance"
+	],
+	"mounts": [
+		"source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind,consistency=cached,readonly",
+		"source=projectname-bashhistory,target=/commandhistory,type=volume"
+	],
+	"workspaceFolder": "/code",
+	"workspaceMount": "source=${localWorkspaceFolder},target=/code,type=bind,consistency=cached",
+}
